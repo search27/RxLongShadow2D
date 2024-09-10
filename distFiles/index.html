@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <style>
+            .explain {
+                position: absolute;
+                top : 0;
+                left : 0;
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 20px;
+                z-index: 10;
+            }
+            #testDom {
+                position: absolute;
+                top : 50%;
+                left : 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: 100%;
+            }
+            canvas {
+            }
+         
+        </style>
+        <script src="./RxFramework.js"></script>
+
+        <script>
+
+
+            const init = () => {
+                const target = document.getElementById('testDom');
+
+                const canvas = RxLongShadow2D.CreateCanvas(target, 2, true);
+                const clientRect = target.getBoundingClientRect();
+                const mouse = { x : 0, y : 0, };
+                target.addEventListener('mousemove', function(e){
+                    mouse.x = e.clientX - clientRect.x;
+                    mouse.y = e.clientY - clientRect.y;
+                }.bind(this));
+                
+
+                const shadows = [];
+                const polyes = [];
+                for(let i = 0; i < 50; i++){
+                    const x = Math.random() * clientRect.width;
+                    const y = Math.random() * clientRect.height;
+                    const size = Math.random() * 100 + 10;
+                    const color = 'hsla('+(x)+',50%, 60%, 1)';
+                    const poly = new RxLongShadow2D.Quadrangle(undefined, x, y, size, size, color);
+                    polyes.push(poly);
+
+                    const shadow = new RxLongShadow2D.Shadow();
+                    shadow.SetLight({x : mouse.x, y : mouse.y});
+                    shadows.push(shadow);
+
+                }
+            
+                const anime = function(){
+                    canvas.forEach(each => { each.ctx.clearRect(0, 0, each.canvas.width, each.canvas.height); });
+
+                    polyes.forEach((poly, index) => {
+                        poly.update();
+                        poly.draw(canvas[1].ctx);
+
+                        shadows[index].SetLight({x : mouse.x, y : mouse.y});
+                        shadows[index].SetParentVertexes(poly.GetVertexes());
+
+                        const color = 'hsla('+(mouse.x)+',30%, 20%, .1)';
+                        shadows[index].SetColor(color);
+                        shadows[index].update();
+                        shadows[index].draw(canvas[0].ctx);
+
+                    })
+                    requestAnimationFrame(anime);
+                }
+                anime();
+
+            }
+
+            window.onload = function(){
+                // RxFramework Time For Settings
+                setTimeout(init, 1000);
+            }
+
+        </script>
+
+    </head>
+    <body>
+
+        <div class="explain">
+            <h1>Rx Long Shadow 2D</h1>
+            <p> * Testing is available until the end of the year.</p>
+         </div>
+
+         <div id="testDom">
+
+         </div>
+
+    </body>
+</html>
