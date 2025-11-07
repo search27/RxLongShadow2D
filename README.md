@@ -2,7 +2,7 @@
 RxLongShadow2D
 
 
-Support By [ Cloud Rx (<a href='https://rxapis.com'>https://rxapis.com</a>) ].
+Support By [ Cloud Rx (<a href='https://novelpie.org'>https://novelpie.org</a>) ].
 * Testing is available until the end of the year.
 
 ## Table of Contents
