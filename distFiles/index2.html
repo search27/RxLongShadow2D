@@ -3,6 +3,9 @@
         <meta charset="utf-8">
 
         <style>
+            body {
+                background-color: #ccc;
+            }
             .explain {
                 position: absolute;
                 top : 0;
@@ -20,6 +23,21 @@
                 height: 100%;
             }
             canvas {
+            }
+
+            .imgs {
+                display: inline-block;
+                position: absolute;
+                top : 50%;
+                left : 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                text-align: center;
+            }
+            .imgs > img {
+                display: inline-block;
+                max-width: 200px;
+                margin : 0 30px;
             }
          
         </style>
@@ -42,19 +60,26 @@
 
                 const shadows = [];
                 const polyes = [];
-                for(let i = 0; i < 50; i++){
-                    const x = Math.random() * clientRect.width;
-                    const y = Math.random() * clientRect.height;
-                    const size = Math.random() * 100 + 10;
-                    const color = 'hsla('+(x)+',50%, 60%, .5)';
-                    const poly = new RxLongShadow2D.Quadrangle(undefined, x, y, size, size, color);
+                const imgs = document.getElementsByTagName('IMG');
+                for(let i = 0; i < imgs.length; i++){
+                    const ec = imgs[i];
+                    const ct = ec.getBoundingClientRect();
+                    const x = ct.x;
+                    const y = ct.y;
+                    const w = ct.width;
+                    const h = ct.height;
+                    // const color = 'hsla('+(x)+',50%, 60%, .5)';
+                    const color = 'white';
+                    const poly = new RxLongShadow2D.Quadrangle(undefined, x, y, w, h, color);
                     polyes.push(poly);
-
+                    
                     const shadow = new RxLongShadow2D.Shadow();
                     shadow.SetLight({x : mouse.x, y : mouse.y});
                     shadows.push(shadow);
 
                 }
+
+
             
                 const anime = function(){
                     canvas.forEach(each => { each.ctx.clearRect(0, 0, each.canvas.width, each.canvas.height); });
@@ -66,7 +91,8 @@
                         shadows[index].SetLight({x : mouse.x, y : mouse.y});
                         shadows[index].SetParentVertexes(poly.GetVertexes());
 
-                        const color = 'hsla('+(mouse.x)+',30%, 20%, .1)';
+                        // const color = 'hsla('+(mouse.x)+',30%, 20%, .1)';
+                        const color = 'white';
                         shadows[index].SetColor(color);
                         shadows[index].update();
                         shadows[index].draw(canvas[0].ctx);
@@ -96,6 +122,12 @@
 
          <div id="testDom">
 
+         </div>
+
+         <div class="imgs">
+            <img src="./img/1.png" />
+            <img src="./img/2.png" />
+            <img src="./img/3.png" />
          </div>
 
     </body>
